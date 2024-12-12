@@ -1,4 +1,4 @@
-Hotel Reservation System
+# Hotel Reservation System
 
 This project is a simple hotel reservation system made using Java. It uses swing for the GUI and MySQL for the database.
 
