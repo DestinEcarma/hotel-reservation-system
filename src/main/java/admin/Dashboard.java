@@ -88,7 +88,7 @@ public class Dashboard extends javax.swing.JFrame {
 
     private void jTabbedPane1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPane1StateChanged
         int selectedTab = jTabbedPane1.getSelectedIndex();
-        
+
         if (selectedTab == 0 && !panelStaffs.loaded) {
             panelStaffs.lazyLoadTable();
         } else if (selectedTab == 1 && !panelRooms.loaded) {
@@ -106,7 +106,7 @@ public class Dashboard extends javax.swing.JFrame {
     public static void main(String args[]) {
         try {
             UIManager.setLookAndFeel(new FlatDarculaLaf());
-            
+
             java.awt.EventQueue.invokeLater(() -> {
                 new Dashboard().setVisible(true);
             });

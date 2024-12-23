@@ -17,36 +17,36 @@ import shared.Session;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
-
 /**
  *
  * @author maker
  */
 public class Login extends javax.swing.JFrame {
+
     /**
      * Creates new form Login
      */
     public Login() {
         this.initComponents();
-        
+
         Runnable submitAction = () -> this.performSubmitAction();
-        
+
         FormHelper.jComponentOnEnterSumit(this.puInput, submitAction);
         FormHelper.jComponentOnEnterSumit(this.ppInput, submitAction);
     }
-    
+
     private void performSubmitAction() {
         String username = puInput.getText();
         String password = String.valueOf(ppInput.getPassword());
-        
+
         if (Defs.dotenv.get("ADMIN_USER").equals(username) && Defs.dotenv.get("ADMIN_USER").equals(password)) {
             new admin.Dashboard().setVisible(true);
-            
+
             dispose();
         } else {
             try {
                 Staff staff = Staff.fromUsername(username);
-                
+
                 if (staff != null && PasswordUtil.passwordVerify(password, staff.passwordHash)) {
                     Session.userId = staff.id;
                     new receptionist.Dashboard().setVisible(true);
@@ -244,7 +244,7 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_buttonSubmitActionPerformed
 
     private void buttonSubmitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonSubmitMouseClicked
-        
+
     }//GEN-LAST:event_buttonSubmitMouseClicked
 
     /**
@@ -253,7 +253,7 @@ public class Login extends javax.swing.JFrame {
     public static void main(String args[]) {
         try {
             UIManager.setLookAndFeel(new FlatDarculaLaf());
-            
+
             java.awt.EventQueue.invokeLater(() -> {
                 new Login().setVisible(true);
             });

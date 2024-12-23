@@ -17,10 +17,11 @@ import shared.Database;
  * @author maker
  */
 public class Modal extends javax.swing.JDialog {
+
     public boolean isSubmitted = false;
     public boolean isDeleted = false;
     public Staff staff = null;
-    
+
     private boolean editMode = false;
     private int id;
     private Staff.Inputs original;
@@ -30,51 +31,51 @@ public class Modal extends javax.swing.JDialog {
         this.init();
         this.setVisible(true);
     }
-    
+
     public Modal(Frame parent, int id, Staff.Inputs input) {
         super(parent, true);
         this.init();
-        
+
         this.inputName.setText(input.name);
         this.inputContact.setText(input.contact);
         this.inputUsername.setText(input.username);
         this.inputPassword.setText(input.password);
-        
+
         this.buttonDelete.setVisible(true);
         this.labelTitle.setText("Edit Staff");
-        
+
         this.editMode = true;
         this.id = id;
         this.original = input;
-        
+
         this.setTitle("Edit Staff");
         this.setVisible(true);
     }
-    
+
     private void init() {
         initComponents();
-        
+
         Runnable submitAction = () -> performSubmitAction();
-        
+
         FormHelper.jComponentOnEnterSumit(inputName, submitAction);
         FormHelper.jComponentOnEnterSumit(inputContact, submitAction);
         FormHelper.jComponentOnEnterSumit(inputUsername, submitAction);
         FormHelper.jComponentOnEnterSumit(inputPassword, submitAction);
     }
-    
+
     private void performSubmitAction() {
         pnErrorMessage.setText("");
         pcErrorMessage.setText("");
         puErrorMessage.setText("");
         ppErrorMessage.setText("");
-        
+
         Staff.Inputs inputs = new Staff.Inputs(
-            inputName.getText(),
-            inputContact.getText(),
-            inputUsername.getText(),
-            String.valueOf(inputPassword.getPassword())
+                inputName.getText(),
+                inputContact.getText(),
+                inputUsername.getText(),
+                String.valueOf(inputPassword.getPassword())
         );
-        
+
         try {
             if (inputs.name.trim().isBlank()) {
                 pnErrorMessage.setText("Field is required");
@@ -103,7 +104,7 @@ public class Modal extends javax.swing.JDialog {
             }
         } catch (SQLException ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, "Could not create/update staff!", ex);
-        } 
+        }
     }
 
     /**
@@ -412,7 +413,7 @@ public class Modal extends javax.swing.JDialog {
         } catch (SQLException ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, "Could not delete staff!", ex);
         }
-        
+
         dispose();
     }//GEN-LAST:event_buttonDeleteMouseClicked
 

@@ -17,43 +17,44 @@ import shared.FormHelper;
  * @author maker
  */
 public class Modal extends javax.swing.JDialog {
+
     public boolean isSubmitted = false;
     public boolean isDeleted = false;
     public Room room = null;
-    
+
     private boolean editMode = false;
     private int id;
     private Room.Inputs original;
-    
+
     public Modal(Frame parent) {
         super(parent, true);
         this.init();
         this.setVisible(true);
     }
-    
+
     public Modal(Frame parent, int id, Room.Inputs input) {
         super(parent, true);
         init();
-        
+
         this.inputRoomNumber.setText(input.roomNumber);
         this.inputRoomType.setSelectedItem(input.roomType);
-        
+
         this.buttonDelete.setVisible(true);
         this.labelTitle.setText("Edit Room");
-        
+
         this.editMode = true;
         this.id = id;
         this.original = input;
-        
+
         this.setTitle("Edit Room");
         this.setVisible(true);
     }
-    
+
     private void init() {
         initComponents();
-        
+
         Runnable submitAction = () -> performSubmitAction();
-        
+
         FormHelper.jComponentOnEnterSumit(inputRoomNumber, submitAction);
         FormHelper.jComponentOnEnterSumit(inputRoomType, submitAction);
     }
@@ -252,7 +253,7 @@ public class Modal extends javax.swing.JDialog {
         } catch (SQLException ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, "Could not delete room!", ex);
         }
-        
+
         dispose();
     }//GEN-LAST:event_buttonDeleteMouseClicked
 
@@ -263,23 +264,23 @@ public class Modal extends javax.swing.JDialog {
     private void performSubmitAction() {
         rnErrorMessage.setText("");
         rtErrorMessage.setText("");
-        
+
         Room.Inputs inputs = new Room.Inputs(
-            inputRoomNumber.getText(),
-            inputRoomType.getSelectedItem().toString()
+                inputRoomNumber.getText(),
+                inputRoomType.getSelectedItem().toString()
         );
-        
+
         try {
             boolean roomTaken = Room.fromRoomNumber(inputs.roomNumber) != null;
-            
+
             if (inputs.roomNumber.trim().isBlank()) {
                 rnErrorMessage.setText("Field is required");
                 inputRoomNumber.grabFocus();
             } else if (inputs.roomType.equals("None")) {
                 rtErrorMessage.setText("Field is required");
                 inputRoomType.grabFocus();
-            } else if ((original == null && roomTaken) ||
-                       (original != null && original.roomNumber.equals(inputs.roomNumber) && roomTaken)) {
+            } else if ((original == null && roomTaken)
+                    || (original != null && original.roomNumber.equals(inputs.roomNumber) && roomTaken)) {
                 rnErrorMessage.setText("Room number already exist");
                 inputRoomNumber.grabFocus();
             } else {
@@ -295,7 +296,7 @@ public class Modal extends javax.swing.JDialog {
         } catch (SQLException ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, "Could not create/update room!", ex);
         }
-        
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

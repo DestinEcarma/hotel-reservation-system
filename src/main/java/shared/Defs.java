@@ -7,6 +7,12 @@
 package shared;
 
 import io.github.cdimascio.dotenv.Dotenv;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -15,18 +21,25 @@ import javax.swing.table.DefaultTableCellRenderer;
  * @author maker
  */
 public class Defs {
-  public static final Dotenv dotenv;
 
-  public static final DefaultTableCellRenderer centerRenderer =
-      new DefaultTableCellRenderer();
+    public static final Dotenv dotenv;
 
-  static {
-    // dotenv = Dotenv.configure().directory("path\\hotel-reservation-system\\.env").load(); // Uncomment this to fix the Dashboard, also adjust the path C:\\...\\.env.
-                                                                                             // You only need to uncomment this once and run the file and comment it
-                                                                                             // back; that should fix the error. The reason being that it is running
-                                                                                             // the files that use this class, and it is trying to look for a .env file.
-    dotenv = Dotenv.load();
+    public static final DefaultTableCellRenderer centerRenderer
+            = new DefaultTableCellRenderer();
 
-    centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
-  }
+    static {
+        /*
+         * Uncomment this to fix the Dashboard, also adjust the path C:\\...\\.env.
+         * You only need to uncomment this once and run the file and comment it
+         * back; that should fix the error. The reason being that it is running
+         * the files that use this class, and it is trying to look for a .env file.
+         */
+        // dotenv = Dotenv.configure().directory("D:\\Documents\\GitHub\\hotel-reservation-system\\.env").load();
+
+        dotenv = Dotenv.load();
+
+        centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
+    }
+
+
 }

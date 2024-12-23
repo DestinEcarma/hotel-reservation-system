@@ -11,6 +11,7 @@ import java.awt.Frame;
  * @author maker
  */
 public class Dialog extends javax.swing.JDialog {
+
     public Dialog(Frame parent, int id) {
         super(parent, false);
         initComponents();

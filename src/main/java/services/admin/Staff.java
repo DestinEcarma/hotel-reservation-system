@@ -18,12 +18,14 @@ import shared.PasswordUtil;
  * @author maker
  */
 public class Staff {
+
     public static class Inputs {
+
         public String name;
         public String contact;
         public String username;
         public String password;
-        
+
         public Inputs(String name, String contact, String username, String password) {
             this.name = name;
             this.contact = contact;
@@ -31,32 +33,35 @@ public class Staff {
             this.password = password;
         }
     }
-    
+
     private static class Queries {
+
         private static final String CREATE = "INSERT INTO staffs SET name = ?, contact = ?, username = ?, password_hash = ?, password_length = ?";
-        
+
         private static class Read {
+
             public static final String ALL = "SELECT * FROM staffs";
             public static final String FROM_USERNAME = "SELECT * FROM staffs WHERE username = ?";
         }
-        
+
         private static class Update {
+
             private static final String NAME = "UPDATE staffs SET name = ? WHERE id = ?";
             private static final String CONTACT = "UPDATE staffs SET contact = ? WHERE id = ?";
             private static final String USERNAME = "UPDATE staffs SET username = ? WHERE id = ?";
             private static final String PASSWORD = "UPDATE staffs SET password_hash = ?, password_length = ? WHERE id = ?";
         }
-        
+
         private static final String DELETE = "DELETE FROM staffs WHERE id = ?";
     }
-    
+
     public final int id;
     public final String name;
     public final String contact;
     public final String username;
     public final int passwordLength;
     public String passwordHash;
-    
+
     private Staff(int id, String name, String contact, String username, int passwordLength) {
         this.id = id;
         this.name = name;
@@ -64,7 +69,7 @@ public class Staff {
         this.username = username;
         this.passwordLength = passwordLength;
     }
-    
+
     private Staff(ResultSet resultSet) throws SQLException {
         this.id = resultSet.getInt("id");
         this.name = resultSet.getString("name");
@@ -73,7 +78,7 @@ public class Staff {
         this.passwordHash = resultSet.getString("password_hash");
         this.passwordLength = resultSet.getInt("password_length");
     }
-    
+
     public static Staff createFrom(Inputs staff) throws SQLException {
         try (PreparedStatement smt = Database.connection.prepareStatement(Queries.CREATE, Statement.RETURN_GENERATED_KEYS)) {
             smt.setString(1, staff.name);
@@ -88,26 +93,25 @@ public class Staff {
                         int id = generatedKeys.getInt(1);
 
                         return new Staff(
-                            id,
-                            staff.name,
-                            staff.contact,
-                            staff.username,
-                            staff.password.length()
+                                id,
+                                staff.name,
+                                staff.contact,
+                                staff.username,
+                                staff.password.length()
                         );
                     }
                 }
             }
         }
-        
+
         return null;
     }
 
     public static List<Staff> getAll() throws SQLException {
         List<Staff> list = new ArrayList();
-        
-        try (Statement smt = Database.connection.createStatement();
-            ResultSet res = smt.executeQuery(Queries.Read.ALL)) {
-        
+
+        try (Statement smt = Database.connection.createStatement(); ResultSet res = smt.executeQuery(Queries.Read.ALL)) {
+
             while (res.next()) {
                 list.add(new Staff(res));
             }
@@ -119,7 +123,7 @@ public class Staff {
     public static Staff fromUsername(String username) throws SQLException {
         try (PreparedStatement smt = Database.connection.prepareStatement(Queries.Read.FROM_USERNAME)) {
             smt.setString(1, username);
-            
+
             try (ResultSet res = smt.executeQuery()) {
                 if (res.next()) {
                     return new Staff(res);
@@ -129,7 +133,7 @@ public class Staff {
 
         return null;
     }
-    
+
     public static Staff updateFromTo(int id, Inputs from, Inputs to) throws SQLException {
         if (!from.name.equals(to.name)) {
             try (PreparedStatement smt = Database.connection.prepareStatement(Queries.Update.NAME)) {
@@ -141,7 +145,7 @@ public class Staff {
                 }
             }
         }
-        
+
         if (!from.contact.equals(to.contact)) {
             try (PreparedStatement smt = Database.connection.prepareStatement(Queries.Update.CONTACT)) {
                 smt.setString(1, to.contact);
@@ -152,7 +156,7 @@ public class Staff {
                 }
             }
         }
-        
+
         if (!from.username.equals(to.username)) {
             try (PreparedStatement smt = Database.connection.prepareStatement(Queries.Update.USERNAME)) {
                 smt.setString(1, to.username);
@@ -163,7 +167,7 @@ public class Staff {
                 }
             }
         }
-        
+
         if (!from.password.equals(to.password)) {
             try (PreparedStatement smt = Database.connection.prepareStatement(Queries.Update.PASSWORD)) {
                 smt.setString(1, PasswordUtil.passwordHash(to.password));
@@ -175,25 +179,25 @@ public class Staff {
                 }
             }
         }
-        
+
         return new Staff(
-            id,
-            to.name,
-            to.contact,
-            to.username,
-            to.password.length()
+                id,
+                to.name,
+                to.contact,
+                to.username,
+                to.password.length()
         );
     }
-    
+
     public static boolean deleteFromId(int id) throws SQLException {
         try (PreparedStatement smt = Database.connection.prepareStatement(Queries.DELETE)) {
             smt.setInt(1, id);
-            
+
             if (smt.executeUpdate() == 1) {
                 return true;
-            } 
+            }
         }
-            
+
         return false;
     }
 }

@@ -11,12 +11,13 @@ import javax.swing.JFrame;
  * @author maker
  */
 public class Session {
+
     public static int userId = 0;
-    
+
     public static void Logout(JFrame frame) {
         Session.userId = 0;
         frame.dispose();
-        
+
         new main.Login().setVisible(true);
     }
 }

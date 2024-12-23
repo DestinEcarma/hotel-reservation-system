@@ -14,6 +14,7 @@ import javax.swing.KeyStroke;
  * @author maker
  */
 public class FormHelper {
+
     public static void jComponentOnEnterSumit(JComponent component, Runnable submitAction) {
         component.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke("ENTER"), "submit");
         component.getActionMap().put("submit", new AbstractAction() {

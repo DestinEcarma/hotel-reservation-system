@@ -18,25 +18,26 @@ import shared.FormHelper;
  * @author maker
  */
 public class Modal extends javax.swing.JDialog {
+
     public boolean isDone = false;
-    
+
     private int id;
     private Inquiry.Inputs original;
-    
+
     public Modal(java.awt.Frame parent, int id, Inquiry.Inputs input) {
         super(parent, true);
         this.initComponents();
-        
+
         FormHelper.jComponentOnEnterSumit(inputRoomType, () -> performSubmitAction());
-        
+
         this.inputClientName.setText(input.clientName);
         this.inputClientContact.setText(input.clientContact);
         this.inputRoomType.setText(input.roomType);
         this.inputPeriod.setText(input.startDate + " - " + input.endDate);
-        
+
         this.id = id;
         this.original = input;
-        
+
         try {
             for (Room room : Room.getNotInPeriodRangeFromRoomType(input.roomType, input.startDate, input.endDate)) {
                 this.inputRoomNumber.addItem(room.roomNumber);
@@ -44,15 +45,15 @@ public class Modal extends javax.swing.JDialog {
         } catch (SQLException ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, "Could not load room table!", ex);
         }
-        
+
         this.setVisible(true);
     }
-    
+
     private void performSubmitAction() {
         prErrorMessage.setText("");
-        
+
         String item = inputRoomNumber.getSelectedItem().toString();
-        
+
         if (item.equals("None")) {
             prErrorMessage.setText("Field is required");
             inputRoomNumber.grabFocus();
@@ -65,7 +66,7 @@ public class Modal extends javax.swing.JDialog {
                         original.startDate,
                         original.endDate
                 );
-                
+
                 if (Reservation.createFrom(input)) {
                     Inquiry.updateStatus(id, Inquiry.Status.Accepted);
                     isDone = true;
@@ -73,7 +74,7 @@ public class Modal extends javax.swing.JDialog {
             } catch (SQLException ex) {
                 Logger.getLogger(Database.class.getName()).log(Level.SEVERE, "Could not create reservation!", ex);
             }
-            
+
             dispose();
         }
     }
@@ -353,7 +354,7 @@ public class Modal extends javax.swing.JDialog {
         } catch (SQLException ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, "Could update status inquiry!", ex);
         }
-        
+
         dispose();
     }//GEN-LAST:event_buttonDeclineMouseClicked
 

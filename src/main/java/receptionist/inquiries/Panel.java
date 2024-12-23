@@ -18,20 +18,20 @@ import shared.Defs;
  * @author maker
  */
 public class Panel extends javax.swing.JPanel {
+
     public boolean loaded;
-    
+
     private JFrame absoluteParent = null;
 
     public Panel() {
         this.initComponents();
     }
-    
+
     public Panel(JFrame parent) {
         this.initComponents();
         this.absoluteParent = parent;
     }
-    
-    
+
     public void lazyLoadTable() {
         try {
             for (Inquiry inquiry : Inquiry.getAll()) {
@@ -40,14 +40,14 @@ public class Panel extends javax.swing.JPanel {
         } catch (SQLException ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, "Could not load staff table!", ex);
         }
-        
+
         loaded = true;
     }
-    
+
     private void addRow(Inquiry inquiry) {
         DefaultTableModel modal = (DefaultTableModel) table.getModel();
-        
-        modal.addRow(new Object[] {
+
+        modal.addRow(new Object[]{
             inquiry.id,
             inquiry.clientName,
             inquiry.clientContact,
@@ -55,7 +55,7 @@ public class Panel extends javax.swing.JPanel {
             inquiry.startDate + " - " + inquiry.endDate
         });
     }
-    
+
     private void deleteRow(int row) {
         ((DefaultTableModel) table.getModel()).removeRow(row);
     }
@@ -153,21 +153,21 @@ public class Panel extends javax.swing.JPanel {
 
             DefaultTableModel modal = (DefaultTableModel) table.getModel();
             int selectedRow = table.getSelectedRow();
-            
+
             String period[] = modal.getValueAt(selectedRow, 4).toString().split(" - ");
-            
+
             Modal checkInquiry = new Modal(
-                absoluteParent,
-                (int) modal.getValueAt(selectedRow, 0),
-                new Inquiry.Inputs(
-                    modal.getValueAt(selectedRow, 1).toString(),
-                    modal.getValueAt(selectedRow, 2).toString(),
-                    modal.getValueAt(selectedRow, 3).toString(),
-                    period[0],
-                    period[1]
-                )
+                    absoluteParent,
+                    (int) modal.getValueAt(selectedRow, 0),
+                    new Inquiry.Inputs(
+                            modal.getValueAt(selectedRow, 1).toString(),
+                            modal.getValueAt(selectedRow, 2).toString(),
+                            modal.getValueAt(selectedRow, 3).toString(),
+                            period[0],
+                            period[1]
+                    )
             );
-            
+
             if (checkInquiry.isDone) {
                 deleteRow(selectedRow);
             }

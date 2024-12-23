@@ -18,22 +18,23 @@ import shared.Defs;
  * @author maker
  */
 public class Panel extends javax.swing.JPanel {
+
     public boolean loaded = false;
-    
+
     private JFrame _absoluteParent = null;
-    
+
     /**
      * Creates new form Panel
      */
     public Panel() {
         this.initComponents();
     }
-    
+
     public Panel(JFrame parent) {
         this.initComponents();
         this._absoluteParent = parent;
     }
-    
+
     public void lazyLoadTable() {
         try {
             for (Room room : Room.getAll()) {
@@ -42,28 +43,28 @@ public class Panel extends javax.swing.JPanel {
         } catch (SQLException ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, "Could not load room table!", ex);
         }
-        
+
         loaded = true;
     }
-    
+
     private void addRow(Room room) {
         DefaultTableModel modal = (DefaultTableModel) table.getModel();
-        
-        modal.addRow(new Object[] {
+
+        modal.addRow(new Object[]{
             room.id,
             room.roomNumber,
             room.roomType
-            // room.isAvailable
+        // room.isAvailable
         });
     }
-    
+
     private void deleteRow(int row) {
         ((DefaultTableModel) table.getModel()).removeRow(row);
     }
-    
+
     private void rerenderAtRow(int row, Room room) {
         DefaultTableModel modal = (DefaultTableModel) table.getModel();
-        
+
         modal.setValueAt(room.roomNumber, row, 1);
         modal.setValueAt(room.roomType, row, 2);
         // modal.setValueAt(room.isAvailable, row, 3);
@@ -188,14 +189,14 @@ public class Panel extends javax.swing.JPanel {
 
             DefaultTableModel modal = (DefaultTableModel) table.getModel();
             int selectedRow = table.getSelectedRow();
-            
+
             Modal editRoom = new Modal(
-                _absoluteParent,
-                (int) modal.getValueAt(selectedRow, 0),
-                new Room.Inputs(
-                    modal.getValueAt(selectedRow, 1).toString(),
-                    modal.getValueAt(selectedRow, 2).toString()
-                )
+                    _absoluteParent,
+                    (int) modal.getValueAt(selectedRow, 0),
+                    new Room.Inputs(
+                            modal.getValueAt(selectedRow, 1).toString(),
+                            modal.getValueAt(selectedRow, 2).toString()
+                    )
             );
 
             if (editRoom.isSubmitted && editRoom.room != null) {

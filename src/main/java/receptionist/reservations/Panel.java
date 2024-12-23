@@ -17,12 +17,13 @@ import shared.Defs;
  * @author maker
  */
 public class Panel extends javax.swing.JPanel {
+
     public boolean loaded = false;
-    
+
     public Panel() {
         initComponents();
     }
-    
+
     public void lazyLoadTable() {
         try {
             for (Reservation reservation : Reservation.getAll()) {
@@ -31,14 +32,14 @@ public class Panel extends javax.swing.JPanel {
         } catch (SQLException ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, "Could not load staff table!", ex);
         }
-        
+
         loaded = true;
     }
-    
+
     private void addRow(Reservation reservation) {
         DefaultTableModel modal = (DefaultTableModel) table.getModel();
-        
-        modal.addRow(new Object[] {
+
+        modal.addRow(new Object[]{
             reservation.id,
             reservation.customer,
             reservation.roomNumber,

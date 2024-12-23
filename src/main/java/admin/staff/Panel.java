@@ -18,22 +18,23 @@ import shared.Defs;
  * @author maker
  */
 public class Panel extends javax.swing.JPanel {
+
     public boolean loaded = false;
-    
+
     private JFrame absoluteParent = null;
-    
+
     /**
      * Creates new form Panel
      */
     public Panel() {
         this.initComponents();
     }
-    
+
     public Panel(JFrame parent) {
         this.initComponents();
         this.absoluteParent = parent;
     }
-    
+
     public void lazyLoadTable() {
         try {
             for (Staff staff : Staff.getAll()) {
@@ -42,14 +43,14 @@ public class Panel extends javax.swing.JPanel {
         } catch (SQLException ex) {
             Logger.getLogger(Database.class.getName()).log(Level.SEVERE, "Could not load staff table!", ex);
         }
-        
+
         loaded = true;
     }
-    
+
     private void addRow(Staff staff) {
         DefaultTableModel modal = (DefaultTableModel) table.getModel();
-        
-        modal.addRow(new Object[] {
+
+        modal.addRow(new Object[]{
             staff.id,
             staff.name,
             staff.contact,
@@ -57,14 +58,14 @@ public class Panel extends javax.swing.JPanel {
             "*".repeat(staff.passwordLength)
         });
     }
-    
+
     private void deleteRow(int row) {
         ((DefaultTableModel) table.getModel()).removeRow(row);
     }
-    
+
     private void rerenderAtRow(int row, Staff staff) {
         DefaultTableModel modal = (DefaultTableModel) table.getModel();
-        
+
         modal.setValueAt(staff.name, row, 1);
         modal.setValueAt(staff.contact, row, 2);
         modal.setValueAt(staff.username, row, 3);
@@ -194,14 +195,14 @@ public class Panel extends javax.swing.JPanel {
             int selectedRow = table.getSelectedRow();
 
             Modal editStaff = new Modal(
-                absoluteParent,
-                (int) modal.getValueAt(selectedRow, 0),
-                new Staff.Inputs(
-                    modal.getValueAt(selectedRow, 1).toString(),
-                    modal.getValueAt(selectedRow, 2).toString(),
-                    modal.getValueAt(selectedRow, 3).toString(),
-                    modal.getValueAt(selectedRow, 4).toString()
-                )
+                    absoluteParent,
+                    (int) modal.getValueAt(selectedRow, 0),
+                    new Staff.Inputs(
+                            modal.getValueAt(selectedRow, 1).toString(),
+                            modal.getValueAt(selectedRow, 2).toString(),
+                            modal.getValueAt(selectedRow, 3).toString(),
+                            modal.getValueAt(selectedRow, 4).toString()
+                    )
             );
 
             if (editStaff.isSubmitted && editStaff.staff != null) {
