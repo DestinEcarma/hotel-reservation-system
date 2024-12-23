@@ -7,12 +7,6 @@
 package shared;
 
 import io.github.cdimascio.dotenv.Dotenv;
-import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -40,6 +34,4 @@ public class Defs {
 
         centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
     }
-
-
 }
