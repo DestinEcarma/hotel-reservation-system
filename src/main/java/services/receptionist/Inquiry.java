@@ -49,20 +49,20 @@ public class Inquiry {
             public static final String FROM_USERNAME = "SELECT * FROM staffs WHERE username = ?";
         }
 
-        private static String UDPATE = "UPDATE inquiries SET status = ? WHERE id = ?";
+        private static final String UDPATE = "UPDATE inquiries SET status = ? WHERE id = ?";
     }
 
     public final int id;
-    public final String clientName;
-    public final String clientContact;
+    public final String name;
+    public final String contact;
     public final String roomType;
     public final String startDate;
     public final String endDate;
 
     private Inquiry(ResultSet resultSet) throws SQLException {
         this.id = resultSet.getInt("id");
-        this.clientName = resultSet.getString("client_name");
-        this.clientContact = resultSet.getString("client_contact");
+        this.name = resultSet.getString("name");
+        this.contact = resultSet.getString("contact");
         this.roomType = resultSet.getString("room_type");
         this.startDate = resultSet.getString("start_date");
         this.endDate = resultSet.getString("end_date");

@@ -49,8 +49,8 @@ public class Panel extends javax.swing.JPanel {
 
         modal.addRow(new Object[]{
             inquiry.id,
-            inquiry.clientName,
-            inquiry.clientContact,
+            inquiry.name,
+            inquiry.contact,
             inquiry.roomType,
             inquiry.startDate + " - " + inquiry.endDate
         });
