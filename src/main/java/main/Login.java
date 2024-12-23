@@ -1,16 +1,17 @@
 package main;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.formdev.flatlaf.FlatDarculaLaf;
-import java.sql.SQLException;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.http.HttpResponse;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import services.admin.Staff;
+import shared.Api;
 import shared.Database;
-import shared.Defs;
 import shared.FormHelper;
-import shared.PasswordUtil;
 import shared.Session;
 
 /*
@@ -22,6 +23,23 @@ import shared.Session;
  * @author maker
  */
 public class Login extends javax.swing.JFrame {
+
+    public static class Inputs {
+
+        public String username;
+        public String password;
+
+        public Inputs(String username, String password) {
+            this.username = username;
+            this.password = password;
+        }
+    }
+
+    public static class ResponseData {
+
+        public String token;
+        public String role;
+    }
 
     /**
      * Creates new form Login
@@ -36,25 +54,35 @@ public class Login extends javax.swing.JFrame {
     }
 
     private void performSubmitAction() {
+        puErrorMessage.setText("");
+        ppErrorMessage.setText("");
+        
         String username = puInput.getText();
         String password = String.valueOf(ppInput.getPassword());
 
-        if (Defs.dotenv.get("ADMIN_USER").equals(username) && Defs.dotenv.get("ADMIN_USER").equals(password)) {
-            new admin.Dashboard().setVisible(true);
-
-            dispose();
-        } else {
-            try {
-                Staff staff = Staff.fromUsername(username);
-
-                if (staff != null && PasswordUtil.passwordVerify(password, staff.passwordHash)) {
-                    Session.userId = staff.id;
+        try {
+            HttpResponse<String> res = Api.postRequest("user", new Inputs(username, password));
+            
+            System.out.println(res);
+            
+            if (res.statusCode() == 200) {
+                ResponseData data = new ObjectMapper().readValue(res.body(), ResponseData.class);
+                
+                Session.token = data.token;
+                
+                if (data.role.equals("admin")) {
+                    new admin.Dashboard().setVisible(true);
+                } else {
                     new receptionist.Dashboard().setVisible(true);
-                    dispose();
                 }
-            } catch (SQLException ex) {
-                Logger.getLogger(Database.class.getName()).log(Level.SEVERE, "Could not get staff!", ex);
+                
+                dispose();
+            } else {
+                puErrorMessage.setText("Username might be invalid");
+                ppErrorMessage.setText("Password might be invalid");
             }
+        } catch (IOException | URISyntaxException | InterruptedException ex) {
+            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

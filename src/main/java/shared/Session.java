@@ -12,10 +12,10 @@ import javax.swing.JFrame;
  */
 public class Session {
 
-    public static int userId = 0;
+    public static String token = null;
 
     public static void Logout(JFrame frame) {
-        Session.userId = 0;
+        Session.token = null;
         frame.dispose();
 
         new main.Login().setVisible(true);

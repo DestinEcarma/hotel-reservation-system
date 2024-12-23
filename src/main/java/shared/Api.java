@@ -25,6 +25,7 @@ public class Api {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(dotenv.get("API_HOST") + path))
                 .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + Session.token)
                 .GET()
                 .build();
 
@@ -39,6 +40,7 @@ public class Api {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(dotenv.get("API_HOST") + path))
                 .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + Session.token)
                 .POST(HttpRequest.BodyPublishers.ofString(payload))
                 .build();
 
@@ -53,6 +55,7 @@ public class Api {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(dotenv.get("API_HOST") + path))
                 .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + Session.token)
                 .PUT(HttpRequest.BodyPublishers.ofString(payload))
                 .build();
 
@@ -64,6 +67,7 @@ public class Api {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(dotenv.get("API_HOST") + path))
                 .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + Session.token)
                 .DELETE()
                 .build();
 
