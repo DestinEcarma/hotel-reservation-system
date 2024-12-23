@@ -62,7 +62,7 @@ public class Room {
     public static Room fromRoomNumber(String roomNumber) {
         try {
             HttpResponse<String> res = Api.getRequest("admin/room/number/" + roomNumber);
-            
+
             if (res.statusCode() != 404) {
                 return new ObjectMapper().readValue(res.body(), Room.class);
             }
@@ -76,7 +76,7 @@ public class Room {
     public static Room updateFromTo(int id, Inputs input) {
         try {
             HttpResponse<String> res = Api.putRequest("admin/room/" + id, input);
-            
+
             if (res.statusCode() != 404) {
                 return new ObjectMapper().readValue(res.body(), Room.class);
             }
