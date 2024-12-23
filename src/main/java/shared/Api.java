@@ -19,6 +19,7 @@ import static shared.Defs.dotenv;
  * @author User
  */
 public class Api {
+
     public static HttpResponse<String> getRequest(String path) throws URISyntaxException, IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
