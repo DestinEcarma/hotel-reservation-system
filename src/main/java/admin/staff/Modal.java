@@ -6,11 +6,7 @@ package admin.staff;
 
 import shared.FormHelper;
 import java.awt.Frame;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import services.admin.Staff;
-import shared.Database;
 
 /**
  *
@@ -76,34 +72,36 @@ public class Modal extends javax.swing.JDialog {
                 String.valueOf(inputPassword.getPassword())
         );
 
-        try {
-            if (inputs.name.trim().isBlank()) {
-                pnErrorMessage.setText("Field is required");
-                inputName.grabFocus();
-            } else if (inputs.contact.trim().isBlank()) {
-                pcErrorMessage.setText("Field is required");
-                inputContact.grabFocus();
-            } else if (inputs.username.trim().isBlank()) {
-                puErrorMessage.setText("Field is required");
-                inputUsername.grabFocus();
-            } else if (inputs.password.trim().isBlank()) {
-                ppErrorMessage.setText("Field is required");
-                inputPassword.grabFocus();
-            } else if (Staff.fromUsername(inputs.username) != null) {
-                puErrorMessage.setText("Username already exist");
-                inputUsername.grabFocus();
-            } else {
-                if (editMode) {
-                    staff = Staff.updateFromTo(id, original, inputs);
-                } else {
-                    staff = Staff.createFrom(inputs);
-                }
+        boolean isTaken = false;
 
-                isSubmitted = true;
-                dispose();
+        if (original != null && !original.username.equals(inputs.username)) {
+            isTaken = Staff.fromUsername(inputs.username) != null;
+        }
+
+        if (inputs.name.trim().isBlank()) {
+            pnErrorMessage.setText("Field is required");
+            inputName.grabFocus();
+        } else if (inputs.contact.trim().isBlank()) {
+            pcErrorMessage.setText("Field is required");
+            inputContact.grabFocus();
+        } else if (inputs.username.trim().isBlank()) {
+            puErrorMessage.setText("Field is required");
+            inputUsername.grabFocus();
+        } else if (inputs.password.trim().isBlank()) {
+            ppErrorMessage.setText("Field is required");
+            inputPassword.grabFocus();
+        } else if (isTaken) {
+            puErrorMessage.setText("Username already exist");
+            inputUsername.grabFocus();
+        } else {
+            if (editMode) {
+                staff = Staff.updateFromTo(id, inputs);
+            } else {
+                staff = Staff.createFrom(inputs);
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, "Could not create/update staff!", ex);
+
+            isSubmitted = true;
+            dispose();
         }
     }
 
@@ -406,12 +404,8 @@ public class Modal extends javax.swing.JDialog {
     }//GEN-LAST:event_buttonSubmitMouseClicked
 
     private void buttonDeleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonDeleteMouseClicked
-        try {
-            if (Staff.deleteFromId(id)) {
-                isDeleted = true;
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, "Could not delete staff!", ex);
+        if (Staff.deleteFromId(id)) {
+            isDeleted = true;
         }
 
         dispose();

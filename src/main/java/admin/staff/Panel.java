@@ -4,13 +4,9 @@
  */
 package admin.staff;
 
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.table.DefaultTableModel;
 import services.admin.Staff;
-import shared.Database;
 import shared.Defs;
 
 /**
@@ -36,12 +32,8 @@ public class Panel extends javax.swing.JPanel {
     }
 
     public void lazyLoadTable() {
-        try {
-            for (Staff staff : Staff.getAll()) {
-                addRow(staff);
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, "Could not load staff table!", ex);
+        for (Staff staff : Staff.getAll()) {
+            addRow(staff);
         }
 
         loaded = true;
