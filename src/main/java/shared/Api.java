@@ -24,6 +24,7 @@ public class Api {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(dotenv.get("API_HOST") + path))
+                .header("Content-Type", "application/json")
                 .GET()
                 .build();
 
@@ -37,6 +38,7 @@ public class Api {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(dotenv.get("API_HOST") + path))
+                .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(payload))
                 .build();
 
@@ -50,16 +52,18 @@ public class Api {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(dotenv.get("API_HOST") + path))
+                .header("Content-Type", "application/json")
                 .PUT(HttpRequest.BodyPublishers.ofString(payload))
                 .build();
 
         return client.send(request, HttpResponse.BodyHandlers.ofString());
     }
 
-    public static HttpResponse<String> deleteApiRequest(String path) throws URISyntaxException, IOException, InterruptedException {
+    public static HttpResponse<String> deleteRequest(String path) throws URISyntaxException, IOException, InterruptedException {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(new URI(dotenv.get("API_HOST") + path))
+                .header("Content-Type", "application/json")
                 .DELETE()
                 .build();
 
