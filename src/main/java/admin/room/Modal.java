@@ -5,11 +5,7 @@
 package admin.room;
 
 import java.awt.Frame;
-import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import services.admin.Room;
-import shared.Database;
 import shared.FormHelper;
 
 /**
@@ -246,12 +242,8 @@ public class Modal extends javax.swing.JDialog {
     }//GEN-LAST:event_buttonSubmitMouseClicked
 
     private void buttonDeleteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_buttonDeleteMouseClicked
-        try {
-            if (Room.deleteFromId(id)) {
-                isDeleted = true;
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, "Could not delete room!", ex);
+        if (Room.deleteFromId(id)) {
+            isDeleted = true;
         }
 
         dispose();
@@ -270,33 +262,31 @@ public class Modal extends javax.swing.JDialog {
                 inputRoomType.getSelectedItem().toString()
         );
 
-        try {
-            boolean roomTaken = Room.fromRoomNumber(inputs.roomNumber) != null;
-
-            if (inputs.roomNumber.trim().isBlank()) {
-                rnErrorMessage.setText("Field is required");
-                inputRoomNumber.grabFocus();
-            } else if (inputs.roomType.equals("None")) {
-                rtErrorMessage.setText("Field is required");
-                inputRoomType.grabFocus();
-            } else if ((original == null && roomTaken)
-                    || (original != null && original.roomNumber.equals(inputs.roomNumber) && roomTaken)) {
-                rnErrorMessage.setText("Room number already exist");
-                inputRoomNumber.grabFocus();
-            } else {
-                if (editMode) {
-                    room = Room.updateFromTo(id, original, inputs);
-                } else {
-                    room = Room.createFrom(inputs);
-                }
-
-                isSubmitted = true;
-                dispose();
-            }
-        } catch (SQLException ex) {
-            Logger.getLogger(Database.class.getName()).log(Level.SEVERE, "Could not create/update room!", ex);
+        boolean roomTaken = false;
+        
+        if (original != null && !original.roomNumber.equals(inputs.roomNumber)) {
+            roomTaken = Room.fromRoomNumber(inputs.roomNumber) != null;
         }
 
+        if (inputs.roomNumber.trim().isBlank()) {
+            rnErrorMessage.setText("Field is required");
+            inputRoomNumber.grabFocus();
+        } else if (inputs.roomType.equals("None")) {
+            rtErrorMessage.setText("Field is required");
+            inputRoomType.grabFocus();
+        } else if (roomTaken) {
+            rnErrorMessage.setText("Room number already exist");
+            inputRoomNumber.grabFocus();
+        } else {
+            if (editMode) {
+                room = Room.updateFromTo(id, inputs);
+            } else {
+                room = Room.createFrom(inputs);
+            }
+
+            isSubmitted = true;
+            dispose();
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
